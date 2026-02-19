@@ -2,8 +2,14 @@ FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-COPY target/*.jar app.jar
+# Copy full project
+COPY . .
 
-EXPOSE 8080
+# Install Maven
+RUN apk add --no-cache maven
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+# Build jar file
+RUN mvn clean package -DskipTests
+
+# Run jar
+CMD ["java", "-jar", "target/hierarchy-0.0.1-SNAPSHOT.jar"]
